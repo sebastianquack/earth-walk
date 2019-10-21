@@ -21,6 +21,11 @@
   "dependencies": {
     "@mapbox/vtquery": "^0.4.1",
     "dotenv": "^8.2.0",
-    "mongoose": "^5.7.5"
+    "mongoose": "^5.7.5",
+    "express": "^4.16.2",
+    "@mapbox/sphericalmercator": "^1.0.5",
+    "@mapbox/tilebelt": "^1.0.1",
+    "ejs": "^2.5.7",
+    "request": "^2.83.0"
   }
 }
