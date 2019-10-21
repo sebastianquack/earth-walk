@@ -179,18 +179,31 @@ convertVectorTile = async function(deflated, tile) {
   }
   //console.log(columns, rows);
 
-  // find borders between water and something else
+  // extra embellishments
 
-  for(let rowCounter = 1; rowCounter < chunkHeight; rowCounter++) {
+  for(let rowCounter = 0; rowCounter < chunkHeight; rowCounter++) {
     for(let columnCounter = 0; columnCounter < chunkWidth; columnCounter++) {
-      if(  (data[rowCounter * chunkWidth + columnCounter] == 707
-          || data[rowCounter * chunkWidth + columnCounter] == 708)
-        && data[(rowCounter - 1) * chunkWidth + columnCounter] != 707 
-        && data[(rowCounter - 1) * chunkWidth + columnCounter] != 708
-        && data[(rowCounter - 1) * chunkWidth + columnCounter] != 406
-        ) {
-          data[rowCounter * chunkWidth + columnCounter] = 406;
-      }   
+      
+      // find borders between water and something else
+      if(rowCounter > 0) {
+        if(  (data[rowCounter * chunkWidth + columnCounter] == 707
+            || data[rowCounter * chunkWidth + columnCounter] == 708)
+          && data[(rowCounter - 1) * chunkWidth + columnCounter] != 707 
+          && data[(rowCounter - 1) * chunkWidth + columnCounter] != 708
+          && data[(rowCounter - 1) * chunkWidth + columnCounter] != 406
+          ) {
+            data[rowCounter * chunkWidth + columnCounter] = 406;
+        }
+      }
+
+      // building borders
+      if(rowCounter < chunkHeight - 1) {
+        if( data[rowCounter * chunkWidth + columnCounter] == 414 
+          && data[(rowCounter +1) * chunkWidth + columnCounter] != 414 
+          ) {
+            data[rowCounter * chunkWidth + columnCounter] = 452;
+        }
+      }
     }
   }
 

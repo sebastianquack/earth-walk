@@ -72,7 +72,7 @@ Game.update = function() {
         //if(tile) console.log(tile.index);
 
         // don't go in water
-        if(!tile || !(tile.index == 707 || tile.index == 708 || tile.index == 406 || tile.index == 414)) {
+        if(!tile || !(tile.index == 707 || tile.index == 708 || tile.index == 406 || tile.index == 452 || tile.index == 414)) {
           Game.player.setPosition(newX, newY);  
           Game.updateEnvironment();
         }
