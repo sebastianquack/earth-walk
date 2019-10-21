@@ -36,6 +36,7 @@ Game.create = function(){
     //Game.camera.setBounds(0, 0, worldWidth*32, worldHeight*32);
     Game.phaserGuy = this.add.image(250,250,'phaserguy');
     Game.phaserGuy.setDepth(1); // So that the ground layer of the newly drawn chunks is not drawn on top of our guy
+    Game.phaserGuy.setOrigin(0.5, 1);
     Game.phaserGuy.visible = false;
     Game.camera.startFollow(Game.phaserGuy);
     Game.player = Game.phaserGuy;
