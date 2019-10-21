@@ -1,0 +1,110 @@
+<head>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+
+  <script src="//cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.min.js"></script>
+  <script src="assets/js/game.js" type="text/javascript"></script>
+
+  <style>
+    * {
+      box-sizing:border-box;
+      -moz-box-sizing:border-box;
+      -webkit-box-sizing:border-box;
+    }
+    body {
+      margin:0;
+      font-family: sans-serif;
+      font-size: 15px;
+      line-height: 1.5em;
+    }
+    #map { 
+      width: 500px;
+      height: 500px;
+      margin: 10px;
+      float: left;
+    }
+    #marker {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      background: #000;
+      display: none;
+    }
+    #game { 
+      width: 500px;
+      height: 500px;
+      margin: 10px;
+      float: left;
+    }
+  </style>
+</head>
+
+<div id="marker"></div>
+<div id="map"></div>
+<div id="game"></div>
+
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2VicXVhY2siLCJhIjoiY2sxeHhhNmE1MGZ4dDNvcXRraW4yNmlxaiJ9.lDD5fiYaD8S-pDmwQFaagQ';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v9',
+    center: [13.4347047,52.4912599],
+    zoom: 17
+});
+
+map.showTileBoundaries=true;
+map.addControl(new mapboxgl.ScaleControl({
+    maxWidth: 300,
+    unit: 'metric'
+}));
+map.keyboard.disable();
+map.addControl(new mapboxgl.NavigationControl());
+
+var markerEl = document.getElementById('marker');
+var marker = null;
+
+placeMarker = function(lng, lat) {
+  //console.log("placeMarker", lng, lat);
+    if(!marker) {
+      markerEl.style.display = "block"; 
+      marker = new mapboxgl.Marker(markerEl).setLngLat([lng, lat]).addTo(map);
+    } 
+    else 
+      marker.setLngLat([lng, lat]);
+}
+
+map.on('click', function(e) {
+  
+  if(confirm("place avatar?")) {
+
+    // set marker
+    placeMarker(e.lngLat.lng, e.lngLat.lat);
+
+    game.scene.scenes[0].events.emit("player-warp", e.lngLat.lng, e.lngLat.lat);
+  }
+
+});
+
+// copied from tilebelt
+// https://github.com/mapbox/tilebelt/blob/master/index.js
+var d2r = Math.PI / 180;
+function pointToTile(lon, lat, z) {
+    var tile = pointToTileFraction(lon, lat, z);
+    tile[0] = Math.floor(tile[0]);
+    tile[1] = Math.floor(tile[1]);
+    return tile;
+}
+function pointToTileFraction(lon, lat, z) {
+  var sin = Math.sin(lat * d2r),
+      z2 = Math.pow(2, z),
+      x = z2 * (lon / 360 + 0.5),
+      y = z2 * (0.5 - 0.25 * Math.log((1 + sin) / (1 - sin)) / Math.PI);
+  x = x % z2
+  if (x < 0) x = x + z2
+  return [x, y, z];
+}
+
+</script>
